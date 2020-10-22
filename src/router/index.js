@@ -1,34 +1,36 @@
-/*
- * @Author: 汪锦
- * @Date: 2020-07-13 09:19:58
- * @LastEditors: 汪锦
- * @LastEditTime: 2020-07-13 10:11:28
- * @Description: 路由配置
- */
 import Vue from "vue";
 import VueRouter from "vue-router";
-import login from "@/views/login.vue";
-
+import Home from "@/views/home/home.vue";
+import Login from '@/views/login/login'
 Vue.use(VueRouter);
+
 
 const routes = [
   {
     path: "/",
-    name: "login",
-    component: login
+    name: "home",
+    component: Home,
   },
   {
-    path: "/welcome",
-    name: "welcome",
-    component: () =>
-      import(/* webpackChunkName: "welcome" */ "@/views/welcome.vue")
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: {
+      hideHeader: true
+    }
   }
 ];
 
 const router = new VueRouter({
-  mode: "history",
   base: process.env.BASE_URL,
   routes
 });
-
+router.beforeEach((to, from, next) => {
+  if (!sessionStorage.getItem('st-token') && to.name != 'login') {
+    setTimeout(() => {
+      next('/login')
+    }, 0);
+  }
+  next();
+})
 export default router;
