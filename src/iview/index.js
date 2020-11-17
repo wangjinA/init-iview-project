@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-07-13 09:35:50
  * @LastEditors: 汪锦
- * @LastEditTime: 2020-10-14 18:10:38
+ * @LastEditTime: 2020-11-17 09:30:21
  * @Description: iview配置
  */
 import Vue from 'vue'
@@ -18,13 +18,16 @@ Message.config({
 Vue.prototype.$Message = Message
 Vue.prototype.$Modal = Modal
 Vue.prototype.$Notice = Notice
-Vue.prototype.$Delete = (confirmCallBack, option) => {
-  Modal.confirm({
-    title: '删除提醒',
-    cancelText: '关闭',
-    content: '是否确认删除？',
-    loading: true,
-    onOk: () => confirmCallBack && confirmCallBack().finally(() => Modal.remove()),
-    ...option
+Vue.prototype.delAPI = (option) => {
+  return new Promise((resolve, reject) => {
+    Modal.confirm({
+      title: '删除提醒',
+      cancelText: '取消',
+      content: '是否确认删除？',
+      loading: true,
+      onOk: _ => (Modal.remove(), resolve()),
+      onCancel: _ => (reject()),
+      ...option
+    })
   })
 }
