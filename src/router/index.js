@@ -1,14 +1,18 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "@/views/home/home.vue";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '@/views/home/home.vue'
 import Login from '@/views/login/login'
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 
 const routes = [
   {
-    path: "/",
-    name: "home",
+    path: '*',
+    component: () => import(/* webpackChunkName: "404" */ '../views/errorPage/404')
+  },
+  {
+    path: '/',
+    name: 'home',
     component: Home,
   },
   {
@@ -19,18 +23,18 @@ const routes = [
       hideHeader: true
     }
   }
-];
+]
 
 const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
-});
+})
 router.beforeEach((to, from, next) => {
   if (!sessionStorage.getItem('st-token') && to.name != 'login') {
     setTimeout(() => {
       next('/login')
-    }, 0);
+    }, 0)
   }
-  next();
+  next()
 })
-export default router;
+export default router

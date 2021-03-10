@@ -31,13 +31,16 @@ export default {
   },
   methods: {
     init() {
+      console.log(this.options)
       if (!this.myChart) {
         this.myChart = this.$echarts.init(this.$refs.echartTemplate)
       } else {
         this.myChart.clear()
       }
       this.myChart.setOption(this.options)
-      this.$nextTick(this.myChart.resize)
+      setTimeout(() => {
+        this.$nextTick(this.myChart.resize)
+      }, 0)
       this.myChart.on('click', params => {
         this.$emit('click', params)
       })

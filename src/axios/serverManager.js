@@ -1,15 +1,15 @@
 /*
  * @Author: 汪锦
  * @Date: 2020-08-21 17:51:29
- * @LastEditors: 汪锦
- * @LastEditTime: 2020-10-15 10:49:52
+ * @LastEditors: 迢迢
+ * @LastEditTime: 2021-03-10 11:21:31
  * @Description: url管理
  */
 const isDev = process.env.NODE_ENV === 'development' // 开发环境下
 
 // 需要代理的接口
 const proxyServer = {
-  40000: 'http://10.44.52.27:40000/',
+  baseApi: 'http://10.44.52.27:40000/',
   8088: 'http://106.37.69.222:8088/'
 }
 let proxyObj = {}

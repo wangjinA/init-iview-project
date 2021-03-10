@@ -1,16 +1,16 @@
 <!--
  * @Author: 汪锦
  * @Date: 2020-03-16 15:20:13
- * @LastEditors: 汪锦
- * @LastEditTime: 2020-10-20 10:57:54
+ * @LastEditors: 迢迢
+ * @LastEditTime: 2021-03-10 10:55:01
  * @Description: 滚动表格
  -->
 <template>
   <div class="scrollTable" @mouseenter="Stop()" @mouseleave="Up()">
     <!-- 标题 -->
     <div class="scrollTable-title" v-if="showHeader" :style="{ height: headerLineHeight + company, fontSize: titleFontSize + company }">
-      <div class="title-item item-index" v-if="showIndex">序号</div>
-      <div class="title-item" v-for="item in columns" :key="item.title" :style="{ flex: `0 0 ${item.width + company}` }">
+      <div class="title-item item-index" :style="padding3" v-if="showIndex">序号</div>
+      <div class="title-item" v-for="item in columns" :key="item.title" :style="`flex: 0 0 ${item.width + company}; ${padding3}`">
         {{ item.title }}
       </div>
     </div>
@@ -21,17 +21,16 @@
       :class="{ overflowAuto: isOverflow }"
       :style="`height: ${lineHeight * showLength + spacing * (showLength - 1)}${company}`"
     >
-      <!-- <div
+      <div
         ref="scrollTableListBox"
         class="scrollTable-list-box"
         :style="animate && `transition: .5s; transform:translate(0, ${-lineHeight * trunCount - spacing}${company})`"
-      > -->
-      <transition-group ref="scrollTableListBox" tag="div" name="scrollTable" appear>
+      >
         <div
           class="scrollTable-list-box-item"
           @click="$emit('select-item', item)"
           :style="{
-            backgroundColor: item.backgroundColor,
+            backgroundColor: columns.length > 1 || showIndex ? item.backgroundColor || 'rgba(28, 52, 79, 0.7)' : '',
             height: lineHeight + company,
             marginBottom: spacing + company,
             fontSize: listFontSize + company
@@ -40,17 +39,16 @@
           :key="item.diyKey"
           :class="{ even: item.index % 2 != 1 }"
         >
-          <div class="list-item item-index" v-if="showIndex">{{ item.index }}</div>
-          <div class="list-item" v-for="col in columns" :key="col.key" :style="{ flex: `0 0 ${col.width + company}` }">
+          <div class="list-item item-index" v-if="showIndex" :style="padding3">{{ item.index }}</div>
+          <div class="list-item" v-for="col in columns" :key="col.key" :style="`flex: 0 0 ${col.width + company}; ${padding3}`">
             <div class="text-overflow" v-if="col.key">{{ item[col.key] }}</div>
             <slot :name="col.slot" v-if="col.slot" :item="item"></slot>
           </div>
         </div>
-      </transition-group>
+      </div>
       <div v-if="list.length == 0" class="scrollTable-list-box-item scrollNotData" :style="{ height: lineHeight + company }">
         暂无数据
       </div>
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -96,7 +94,12 @@ export default {
     // 表头数组 [{name: 表头名字, attr: '表体属性名', slot: '插槽名称', title: '是否显示表体', width: '宽度'}]
     columns: {
       type: Array,
-      default: _ => []
+      default: () => [
+        {
+          title: '',
+          slot: 'list'
+        }
+      ]
     },
     // 表体数组
     data: {
@@ -127,9 +130,9 @@ export default {
   data() {
     return {
       isOverflow: false,
-      timeOutNum: undefined,
       list: [],
-      isOpenScroll: false
+      isOpenScroll: false,
+      animate: false
     }
   },
   watch: {
@@ -145,28 +148,18 @@ export default {
         this.$nextTick(() => {
           this.setOpenScroll()
         })
-        if (val.length) {
-          this.$nextTick(() => {
-            if (this.isOpenScroll) {
-              this.ScrollUp()
-            }
-          })
-        } else {
-          this.clear()
-        }
       },
       deep: true,
       immediate: true
     },
     isOpenScroll(val) {
-      console.log(val)
       val ? this.Up() : this.clear()
     }
   },
   methods: {
     setOpenScroll() {
       // 判断 内容 > 容器，则开启滚动
-      this.isOpenScroll = this.$refs.scrollTableListBox.$el.offsetHeight > this.$refs.scrollTableList.offsetHeight
+      this.isOpenScroll = this.$refs.scrollTableListBox.offsetHeight > this.$refs.scrollTableList.offsetHeight
     },
     fontSize(num) {
       return num * 100
@@ -184,15 +177,15 @@ export default {
       if (this.list.length != 0) {
         this.clear()
         this.intNum = setInterval(() => {
+          this.animate = true // 向上滚动的时候需要添加css3过渡动画
           this.timeOutNum = setTimeout(() => {
-            console.log(1)
             this.list.push(
               ...this.list.splice(0, this.trunCount).map(item => ({
-                // this.list.splice(0, this.trunCount).map(item => ({
                 ...item,
                 diyKey: this.getRandomCount()
               }))
             )
+            this.animate = false
           }, 500)
         }, this.duration)
       }
@@ -209,16 +202,37 @@ export default {
       this.ScrollUp()
     },
     clear() {
-      if (this.intNum) {
-        clearInterval(this.intNum)
+      clearInterval(this.intNum)
+      clearTimeout(this.timeOutNum)
+    },
+    onVisibilityChange() {
+      if (!document[this.hiddenProperty]) {
+        console.log(this)
+        console.log('页面激活')
+        this.Up()
+      } else {
+        console.log('页面非激活')
+        this.Stop()
+        this.clear()
       }
-      if (this.timeOutNum) {
-        clearTimeout(this.timeOutNum)
+    }
+  },
+  computed: {
+    padding3() {
+      if (this.columns.length > 1 || this.showIndex) {
+        return 'padding: 0 3%;'
       }
+      return ''
     }
   },
   destroyed() {
     this.clear()
+    document.removeEventListener(this.visibilityChangeEvent, this.onVisibilityChange)
+  },
+  created() {
+    this.hiddenProperty = 'hidden' in document ? 'hidden' : 'webkitHidden' in document ? 'webkitHidden' : 'mozHidden' in document ? 'mozHidden' : null
+    this.visibilityChangeEvent = this.hiddenProperty.replace(/hidden/i, 'visibilitychange')
+    document.addEventListener(this.visibilityChangeEvent, this.onVisibilityChange)
   }
 }
 </script>
@@ -242,7 +256,6 @@ export default {
     // font-weight: 700;
     position: relative;
     .title-item {
-      padding: 0 3%;
       flex: 1;
       // &:nth-child(3) {
       //   flex: none;
@@ -261,11 +274,9 @@ export default {
         justify-content: center;
         align-items: center;
         // background-color: rgba(112, 251, 253, 0.1);
-        background: rgba(28, 52, 79, 0.7);
         // background-color: #203D5E;
         border-bottom: 1px solid rgba(255, 255, 255, 0.15);
         .list-item {
-          padding: 0 3%;
           overflow: hidden;
           flex: 1;
           .scrollTable-tooltip {
@@ -301,30 +312,5 @@ export default {
   //   transition: all 0.5s;
   //   margin-top: -0.225px; //高度等于行高
   // }
-}
-
-// 滚动动画
-.scrollTable-enter {
-  transform: translateY(100%);
-  opacity: 0;
-}
-.scrollTable-leave-to {
-  transform: translateY(-100%);
-}
-.scrollTable-leave,
-.scrollTable-enter-to {
-  transform: translateY(0);
-  opacity: 1;
-}
-.scrollTable-leave-active {
-  width: 100%;
-  position: absolute;
-  transition: 0.5s;
-}
-.scrollTable-enter-active {
-  transition: 0.5s;
-}
-.scrollTable-move {
-  transition: 0.5s;
 }
 </style>

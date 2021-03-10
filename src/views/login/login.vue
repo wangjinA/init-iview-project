@@ -1,7 +1,7 @@
 <template>
   <div class="st-login">
     <div class="login-bg-title">
-      昌平智慧社区平台
+      iview-project
     </div>
     <div class="bg-ball">
       <img src="./images/ball.png" />
@@ -11,13 +11,23 @@
         <div class="input-item-icon">
           <img src="./images/yonghu.png" />
         </div>
-        <input type="text" class="reset" v-model="formDta.userName" placeholder="请输入用户名" />
+        <input
+          type="text"
+          class="reset"
+          v-model="formDta.userName"
+          placeholder="请输入用户名"
+        />
       </div>
       <div class="input-item">
         <div class="input-item-icon">
           <img src="./images/mima.png" />
         </div>
-        <input type="text" class="reset" v-model="formDta.password" placeholder="请输入密码" />
+        <input
+          type="text"
+          class="reset"
+          v-model="formDta.password"
+          placeholder="请输入密码"
+        />
       </div>
       <div class="login-operation">
         <div class="save-userName">
@@ -38,44 +48,44 @@
 
 <script>
 export default {
-  name: 'login',
+  name: "login",
   data() {
     return {
       formDta: {
-        userName: 'admin',
-        password: '123456'
+        userName: "admin",
+        password: "123456"
       }
-    }
+    };
   },
   methods: {
     handleLogin() {
-      let message = ''
+      let message = "";
       if (!this.formDta.userName) {
-        message = '请输入用户名'
+        message = "请输入用户名";
       } else if (!this.formDta.password) {
-        message = '请输入密码'
+        message = "请输入密码";
       }
       if (message) {
         return this.$Message.error({
           background: true,
           content: message
-        })
+        });
       } else {
         this.$Message.success({
           background: true,
-          content: '登录成功'
-        })
-        sessionStorage.setItem('st-token', 'tag-token')
-        this.$router.push('/')
+          content: "登录成功"
+        });
+        sessionStorage.setItem("st-token", "tag-token");
+        this.$router.push("/");
       }
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
 .st-login {
-  background: url('./images/bg.png');
+  background: url("./images/bg.png");
   background-size: 100% 100%;
   .bg-ball {
     // background: url('./images/ball.png');
@@ -172,7 +182,7 @@ export default {
     height: 80px;
     line-height: 80px;
     font-size: 22px;
-    .bg-style('./images/login-btn.png');
+    .bg-style("./images/login-btn.png");
     text-align: center;
     margin-bottom: 67px;
     letter-spacing: 0.5em;

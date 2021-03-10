@@ -1,23 +1,23 @@
 <!--
  * @Author: 汪锦
  * @Date: 2020-07-13 09:19:58
- * @LastEditors: 汪锦
- * @LastEditTime: 2020-10-22 15:27:18
+ * @LastEditors: 迢迢
+ * @LastEditTime: 2021-03-10 11:33:48
  * @Description: 文件描述
 -->
 <template>
   <div id="app">
-    <template v-if="!$route.meta.hideHeader">
-      <CommonHeader></CommonHeader>
-    </template>
-    <router-view :class="`main-view ${$route.meta.hideHeader ? 'hideHeader' : ''}`" />
+    <CommonHeader v-if="!$route.meta.hideHeader"></CommonHeader>
+    <router-view
+      :class="`main-view ${$route.meta.hideHeader ? 'hideHeader' : ''}`"
+    />
   </div>
 </template>
 
 <script>
-import CommonHeader from '@/layout/header/header'
+import CommonHeader from "@/layout/header/header";
 export default {
-  name: 'app',
+  name: "app",
   components: {
     CommonHeader
   },
@@ -25,14 +25,14 @@ export default {
     $route: {
       immediate: true,
       handler(route) {
-        console.log(route)
+        console.log(route);
       }
     }
   },
   mounted() {
-    window.temp = this
+    window.temp = this;
   }
-}
+};
 </script>
 
 <style lang="less">

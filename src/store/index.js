@@ -1,16 +1,17 @@
 /*
  * @Author: 汪锦
  * @Date: 2020-10-13 10:09:11
- * @LastEditors: 汪锦
- * @LastEditTime: 2020-10-22 15:30:07
- * @Description:
+ * @LastEditors: 迢迢
+ * @LastEditTime: 2021-03-10 11:18:24
+ * @Description: Vuex
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+// 全局state，自动注入所有vue组件
 const state = {
-  test: false,
+  test: false
 }
 
 const mutations = {}

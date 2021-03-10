@@ -1,8 +1,8 @@
 /*
  * @Author: 汪锦
  * @Date: 2020-07-13 09:21:44
- * @LastEditors: 汪锦
- * @LastEditTime: 2020-10-19 19:14:54
+ * @LastEditors: 迢迢
+ * @LastEditTime: 2021-03-10 10:59:30
  * @Description: vue配置文件
  */
 const isProduction = process.env.NODE_ENV === "production"
@@ -28,7 +28,7 @@ Object.keys(proxyServer).forEach(key => {
 
 module.exports = {
   publicPath,
-  lintOnSave: false, // ESlint打开 false为关闭
+  lintOnSave: true, // ESlint打开 false为关闭
   chainWebpack: config => {
     config.resolve.alias
       .set("_c", resolve("src/components"))
