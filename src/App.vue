@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-07-13 09:19:58
  * @LastEditors: 迢迢
- * @LastEditTime: 2021-03-26 09:42:14
+ * @LastEditTime: 2021-03-26 11:02:57
  * @Description: App
 -->
 <template>
@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import CommonHeader from "@/layout/header/header";
+import CommonHeader from "@/components/header";
 export default {
-  name: "app",
+  name: "App",
   components: {
     CommonHeader
   },
