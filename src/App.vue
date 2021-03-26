@@ -2,14 +2,15 @@
  * @Author: 汪锦
  * @Date: 2020-07-13 09:19:58
  * @LastEditors: 迢迢
- * @LastEditTime: 2021-03-10 11:33:48
- * @Description: 文件描述
+ * @LastEditTime: 2021-03-26 09:42:14
+ * @Description: App
 -->
 <template>
   <div id="app">
     <CommonHeader v-if="!$route.meta.hideHeader"></CommonHeader>
     <router-view
-      :class="`main-view ${$route.meta.hideHeader ? 'hideHeader' : ''}`"
+      id="main-view"
+      :class="{ hideHeader: $route.meta.hideHeader }"
     />
   </div>
 </template>
@@ -43,7 +44,7 @@ export default {
   background-repeat: no-repeat;
 }
 // 补padding-top
-.main-view {
+#main-view {
   padding-top: var(--header-height);
   height: 100vh;
   width: 100vw;
