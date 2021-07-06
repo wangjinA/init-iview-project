@@ -5,11 +5,6 @@ export const echartMixin = {
       type: Boolean,
       default: true
     },
-    openCarousel: {
-      // 打开轮播  默认关闭
-      type: Boolean,
-      default: false
-    },
     duration: {
       // 多少毫秒执行一次
       type: Number,
@@ -17,23 +12,9 @@ export const echartMixin = {
     }
   },
   methods: {
-    __openCarousel() {
-      let endValue = this.options.dataZoom[0].endValue;
-      this.carousel_timer = setInterval(() => {
-        if (this.options.dataZoom[0].endValue == this.options.xAxis.data.length - 1) {
-          this.options.dataZoom[0].endValue = endValue
-          this.options.dataZoom[0].startValue = 0
-        } else {
-          this.options.dataZoom[0].endValue = this.options.dataZoom[0].endValue + 1
-          this.options.dataZoom[0].startValue = this.options.dataZoom[0].startValue + 1
-        }
-        this.myChart.setOption(this.options)
-      }, this.duration / 2)
-    },
     __clearInterval() {
       // 销毁定时器
       clearInterval(this.private_timer)
-      clearInterval(this.carousel_timer)
     },
     __openInterval() {
       // 开启定时器
@@ -61,17 +42,6 @@ export const echartMixin = {
     if (this.openInterval) {
       this.__openInterval()
     }
-    if (this.openCarousel) {
-      this.__openCarousel()
-    }
-  },
-  destroyed() {
-    this.__clearInterval() // 销毁定时器
-  }
-}
-
-export const globalEchartMixin = {
-  mounted() {
     this.$bus_$on('resize', () => {
       // 存在myChart对象则并且窗口发生变化的时候Resize
       if (this.myChart) {
@@ -81,10 +51,8 @@ export const globalEchartMixin = {
       }
     })
   },
-
+  destroyed() {
+    this.__clearInterval() // 销毁定时器
+  }
 }
-
-export default {
-  echartMixin,
-  globalEchartMixin
-}
+export default echartMixin

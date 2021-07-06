@@ -5,52 +5,50 @@
 <script>
 export default {
   mixins: [echartMixin],
-  name: 'echartTemplate',
+  name: "EchartTemplate",
   props: {
-    options: {
+    option: {
       type: Object,
-      required: true
+      required: true,
     },
     width: {
       type: String,
-      default: '100%'
+      default: "100%",
     },
     height: {
       type: String,
-      default: '100%'
-    }
+      default: "100%",
+    },
   },
   data() {
-    return {}
+    return {};
   },
   watch: {
-    options: {
-      handler: 'init',
-      deep: true
-    }
+    option: {
+      handler: "init",
+      deep: true,
+    },
   },
   methods: {
     init() {
-      console.log(this.options)
       if (!this.myChart) {
-        this.myChart = this.$echarts.init(this.$refs.echartTemplate)
+        this.myChart = this.$echarts.init(this.$refs.echartTemplate);
       } else {
-        this.myChart.clear()
+        this.myChart.clear();
       }
-      this.myChart.setOption(this.options)
+      this.myChart.setOption(this.option);
       setTimeout(() => {
-        this.$nextTick(this.myChart.resize)
-      }, 0)
-      this.myChart.on('click', params => {
-        this.$emit('click', params)
-      })
-    }
+        this.$nextTick(this.myChart.resize);
+      }, 0);
+      this.myChart.on("click", (params) => {
+        this.$emit("click", params);
+      });
+    },
   },
-  destroyed() {},
   mounted() {
-    this.$nextTick(this.init)
-  }
-}
+    this.$nextTick(this.init);
+  },
+};
 </script>
 
 <style lang="less" scoped>

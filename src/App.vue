@@ -2,16 +2,13 @@
  * @Author: 汪锦
  * @Date: 2020-07-13 09:19:58
  * @LastEditors: 迢迢
- * @LastEditTime: 2021-03-26 11:02:57
+ * @LastEditTime: 2021-03-30 14:49:08
  * @Description: App
 -->
 <template>
   <div id="app">
     <CommonHeader v-if="!$route.meta.hideHeader"></CommonHeader>
-    <router-view
-      id="main-view"
-      :class="{ hideHeader: $route.meta.hideHeader }"
-    />
+    <router-view id="main-view" :class="{ hideHeader: $route.meta.hideHeader }" />
   </div>
 </template>
 
@@ -20,19 +17,19 @@ import CommonHeader from "@/components/header";
 export default {
   name: "App",
   components: {
-    CommonHeader
+    CommonHeader,
   },
   watch: {
     $route: {
       immediate: true,
       handler(route) {
         console.log(route);
-      }
-    }
+      },
+    },
   },
   mounted() {
     window.temp = this;
-  }
+  },
 };
 </script>
 
