@@ -29,9 +29,9 @@ export const echartMixin = {
       }
       let myChart = this.myChart
       if (myChart) {
-        let options = myChart.getOption()
+        let option = myChart.getOption()
         myChart.clear()
-        myChart.setOption(options)
+        myChart.setOption(option)
       }
     },
     resize() {
@@ -47,6 +47,12 @@ export const echartMixin = {
       if (this.myChart) {
         if (this.myChart.resize && typeof this.myChart.resize === 'function') {
           this.myChart.resize()
+        }
+        if (typeof this.option === 'function') {
+
+          this.myChart.dispose()
+          delete this.myChart
+          this.init()
         }
       }
     })

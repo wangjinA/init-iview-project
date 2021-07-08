@@ -8,7 +8,7 @@ export default {
   name: "EchartTemplate",
   props: {
     option: {
-      type: Object,
+      type: [Object, Function],
       required: true,
     },
     width: {
@@ -36,7 +36,15 @@ export default {
       } else {
         this.myChart.clear();
       }
-      this.myChart.setOption(this.option);
+      let option;
+      if (typeof this.option === "function") {
+        option = this.option();
+      } else {
+        option = this.$utils.deepClone(this.option);
+      }
+      console.log(option.textStyle.fontSize);
+      this.myChart.setOption(option);
+
       setTimeout(() => {
         this.$nextTick(this.myChart.resize);
       }, 0);
