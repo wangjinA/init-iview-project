@@ -2,7 +2,7 @@
  * @Author: 汪锦
  * @Date: 2020-03-25 15:32:55
  * @LastEditors: 迢迢
- * @LastEditTime: 2021-07-09 10:28:42
+ * @LastEditTime: 2021-07-09 11:00:03
  * @Description: 公共表格
  -->
 
@@ -16,11 +16,11 @@ const defaultStyles = {
 
   color: "rgba(226,247,255,1)",
   fontSize: "0.14rem",
-  height: ".87rem",
+  height: "8vh",
   hoverColor: "transparent",
 
   stripeColor: ["transparent", "transparent"],
-  borderColor: "#f55",
+  borderColor: "rgba(255,255,255,0.3)",
 };
 export default {
   name: "HyTable",
@@ -260,6 +260,7 @@ export default {
     }
     .ivu-table-cell {
       overflow: initial; // 文本缺陷
+      padding: 0 0.1rem;
     }
     tr.ivu-table-row-hover td {
       // background-color: var(--hoverColor) !important;
